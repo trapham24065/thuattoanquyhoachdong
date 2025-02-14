@@ -67,7 +67,7 @@
                         $('#result').html('<div class="alert alert-danger">' + response.error + '</div>');
                     } else {
 
-                        if (response.ketQua == -1) {
+                        if (response.result == -1) {
                             $('#result').html('<div class="alert alert-info">Không thể đạt được tổng khối lượng ' + response.S + '.</div>');
                         } else {
                             $('#result').html('<div class="alert alert-success">Số lượng gà ít nhất cần chọn: ' + response.result + '</div>');

@@ -7,28 +7,23 @@
  * @time    6:45 PM
  **/
 
-/** The processing function calculates the smallest value
- * of the number of chickens that matches the given weight
+/** The processing function finds the minimum number of
+ * chickens using Dynamic Programming to achieve mass >= S
  * */
-function findMinimumChickens($weights, $S) {
-	rsort($weights);
-
-	$totalWeight = 0;
-	$numChickens = 0;
+function findMinimumChickensDP($weights, $S) {
+	$dp = array_fill(0, $S + 1, PHP_INT_MAX);
+	$dp[0] = 0;
 
 	foreach ($weights as $weight) {
-		if ($totalWeight >= $S) {
-			break;
+
+		for ($i = $S; $i >= $weight; $i--) {
+			if ($dp[$i - $weight] != PHP_INT_MAX) {
+				$dp[$i] = min($dp[$i], $dp[$i - $weight] + 1);
+			}
 		}
-		$totalWeight += $weight;
-		$numChickens++;
-	}
-// Return the number of chickens or -1 if not achievable
-	if ($totalWeight < $S) {
-		return -1;
 	}
 
-	return $numChickens;
+	return $dp[$S] == PHP_INT_MAX ? -1 : $dp[$S];
 }
 
 // Initialize response array
@@ -81,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (count($weights) != $X) {
 			$response['error'] = "Số lượng cân nặng không phù hợp với số lượng gà nhập vào.";
 		} else {
-			$response['result'] = findMinimumChickens($weights, $S);
+			$response['result'] = findMinimumChickensDP($weights, $S);
 			$response['S'] = $S;
 		}
 	}
