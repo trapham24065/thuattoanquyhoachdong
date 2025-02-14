@@ -11,19 +11,24 @@
  * chickens using Dynamic Programming to achieve mass >= S
  * */
 function findMinimumChickensDP($weights, $S) {
-	$dp = array_fill(0, $S + 1, PHP_INT_MAX);
+	$maxWeight = max($weights);
+	$dp = array_fill(0, ceil($S * 10) + 1, PHP_INT_MAX);
 	$dp[0] = 0;
 
-	foreach ($weights as $weight) {
+	$scaledWeights = array_map(function($weight) {
+		return round($weight * 10);
+	}, $weights);
+	$scaledS = round($S * 10);
 
-		for ($i = $S; $i >= $weight; $i--) {
+	foreach ($scaledWeights as $weight) {
+		for ($i = $scaledS; $i >= $weight; $i--) {
 			if ($dp[$i - $weight] != PHP_INT_MAX) {
 				$dp[$i] = min($dp[$i], $dp[$i - $weight] + 1);
 			}
 		}
 	}
 
-	return $dp[$S] == PHP_INT_MAX ? -1 : $dp[$S];
+	return $dp[$scaledS] == PHP_INT_MAX ? -1 : $dp[$scaledS];
 }
 
 // Initialize response array
@@ -38,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	$X = intval($_POST['X']);
 	$weightsInput = $_POST['weights'];
-	$S = intval($_POST['S']);
+	$S = floatval($_POST['S']);
 
 	$errors = [];
 
@@ -52,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 
 	// Convert the input string to an array of integers
-	$weightsArray = array_map('intval', explode(',', $weightsInput));
+	$weightsArray = array_map('floatval', explode(',', $weightsInput));
 
 	// Check for negative or zero values in weightsArray
 	$negativeWeights = array_filter($weightsArray, function($value) {

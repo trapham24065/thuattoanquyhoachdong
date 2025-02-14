@@ -32,7 +32,7 @@
 
         <div class="mb-3">
             <label for="S" class="form-label">Tổng khối lượng cần đạt (S):</label>
-            <input type="number" class="form-control" id="S" name="S" placeholder="Nhập tổng khối lượng" required>
+            <input  type="number"  step="0.01" class="form-control" id="S" name="S" placeholder="Nhập tổng khối lượng" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Tính Toán</button>
